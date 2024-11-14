@@ -67,6 +67,10 @@ dependencies {
     implementation ("androidx.compose.material:material:1.0.5")
     implementation ("androidx.compose.ui:ui-tooling-preview:1.0.5")
     debugImplementation ("androidx.compose.ui:ui-tooling:1.0.5")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.3-beta")
+
+
+
 
 
 

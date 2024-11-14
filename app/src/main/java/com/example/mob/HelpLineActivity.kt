@@ -1,8 +1,10 @@
 package com.example.mob
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -11,10 +13,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mob.R
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HelpLineActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +42,7 @@ class HelpLineActivity : ComponentActivity() {
 fun HelpLine() {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    var feedbackText by remember { mutableStateOf(TextFieldValue("")) }
 
     Column(
         modifier = Modifier
@@ -51,7 +56,6 @@ fun HelpLine() {
             modifier = Modifier
                 .fillMaxWidth() // Ensures the image spans the entire width
                 .height(130.dp)
-
         )
 
         // Apply padding to the rest of the content
@@ -84,29 +88,30 @@ fun HelpLine() {
             SectionCard("Contact Details") {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        painter = painterResource(id = R.drawable.phone), // Using phone.png as the icon
+                        painter = painterResource(id = R.drawable.phone),
                         contentDescription = "Phone Icon",
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "Phone: +44 (0)800 028 3766", fontSize = 14.sp, color = Color.Gray)
+                    Text(text = "Phone: +44 (0)117 32 86268.", fontSize = 14.sp, color = Color.Gray)
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        painter = painterResource(id = R.drawable.email), // Using email.jpg as the icon
+                        painter = painterResource(id = R.drawable.email),
                         contentDescription = "Email Icon",
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "Email: contact@uwe.ac.uk", fontSize = 14.sp, color = Color.Gray)
+                    Text(text = "Email: wellbeing@uwe.ac.uk", fontSize = 14.sp, color = Color.Gray)
                 }
             }
 
             // 24/7 Suicide Helpline Card
             SectionCard("24/7 Suicide Helpline") {
+                Text(text = "The Samaritans", fontSize = 14.sp, color = Color.Gray)
                 Text(
-                    text = "Call: 0800 123 4567",
+                    text = "Call: 116123",
                     fontSize = 14.sp,
                     color = Color.Red,
                     modifier = Modifier.clickable {
@@ -117,9 +122,9 @@ fun HelpLine() {
             }
 
             // 24/7 Mental Health Helpline Card
-            SectionCard("24/7 Mental Health Helpline") {
+            SectionCard("Mind Support Line") {
                 Text(
-                    text = "Call: 0800 765 4321",
+                    text = "Call: 0300 102 1234",
                     fontSize = 14.sp,
                     color = Color.Blue,
                     modifier = Modifier.clickable {
@@ -131,24 +136,16 @@ fun HelpLine() {
 
             Divider(color = Color.LightGray, thickness = 1.dp, modifier = Modifier.padding(vertical = 8.dp))
 
-            // Other sections (Opening Hours, Location, Web Resources, etc.)
             SectionCard("Opening Hours") {
-                Text(text = "Monday to Friday: 8 AM - 8 PM", fontSize = 14.sp, color = Color.Gray)
-                Text(text = "Saturday: 10 AM - 4 PM", fontSize = 14.sp, color = Color.Gray)
-            }
+                Text(text = "Term Times", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(text = "Monday to Thursday: 8:30 AM - 5:00 PM", fontSize = 14.sp, color = Color.Gray)
+                Text(text = "Friday: 8:30 AM - 4:30 PM", fontSize = 14.sp, color = Color.Gray)
 
-            SectionCard("Location") {
-                Text(text = "UWE Campus, Room 101", fontSize = 14.sp, color = Color.Gray)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Get Directions",
-                    fontSize = 14.sp,
-                    color = Color.Blue,
-                    modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=UWE+Campus+Room+101"))
-                        context.startActivity(intent)
-                    }
-                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(text = "Out-of-Term Times", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(text = "Monday to Thursday: 8:30 AM - 4:30 PM", fontSize = 14.sp, color = Color.Gray)
+                Text(text = "Friday: 8:30 AM - 4:00 PM", fontSize = 14.sp, color = Color.Gray)
             }
 
             SectionCard("Web Resources") {
@@ -157,7 +154,7 @@ fun HelpLine() {
                     fontSize = 14.sp,
                     color = Color.Blue,
                     modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.uwe.ac.uk"))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.uwe.ac.uk/life/health-and-wellbeing/get-wellbeing-support"))
                         context.startActivity(intent)
                     }
                 )
@@ -167,7 +164,7 @@ fun HelpLine() {
                     fontSize = 14.sp,
                     color = Color.Blue,
                     modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.uwe.ac.uk/student-support"))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.uwe.ac.uk/study/study-support/student-support-advisers"))
                         context.startActivity(intent)
                     }
                 )
@@ -189,7 +186,7 @@ fun HelpLine() {
                     fontSize = 14.sp,
                     color = Color.Blue,
                     modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.uwe.ac.uk/exam-preparation"))
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.uwe.ac.uk/study/study-support/study-skills/prepare-for-assessments#:~:text=Completing%20exams%20at%20home&text=Here%20are%20some%20tips%20to,friends%20and%20support%20each%20other"))
                         context.startActivity(intent)
                     }
                 )
@@ -213,21 +210,64 @@ fun HelpLine() {
                 )
             }
 
+            // Feedback Section with TextField and Submit Button
             SectionCard("Feedback") {
-                Text(
-                    text = "Give Feedback",
-                    fontSize = 14.sp,
-                    color = Color.Blue,
-                    modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = Uri.parse("mailto:feedback@uwe.ac.uk")
-                            putExtra(Intent.EXTRA_SUBJECT, "Feedback on Support Services")
-                        }
-                        context.startActivity(intent)
-                    }
+                OutlinedTextField(
+                    value = feedbackText,
+                    onValueChange = { feedbackText = it },
+                    label = { Text("Enter your feedback") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {
+                        saveFeedback(context, feedbackText.text)
+                        feedbackText = TextFieldValue("") // Clear the text after saving
+                    },
+                    modifier = Modifier.align(Alignment.End),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF6200EE)) // Purple button
+                ) {
+                    Text("Submit", color = Color.White)
+                }
             }
         }
+    }
+}
+
+// Function to save feedback with date and time in internal storage
+fun saveFeedback(context: Context, feedback: String) {
+    val currentTime = System.currentTimeMillis()
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    val formattedDate = dateFormat.format(Date(currentTime))
+
+    val fileContent = """
+        Date: $formattedDate
+        Feedback: $feedback
+
+    """.trimIndent()
+
+    try {
+        context.openFileOutput("feedback.txt", Context.MODE_APPEND).use { output ->
+            output.write(fileContent.toByteArray())
+        }
+        Toast.makeText(context, "Feedback submitted!", Toast.LENGTH_SHORT).show()
+    } catch (e: Exception) {
+        Toast.makeText(context, "Failed to submit feedback", Toast.LENGTH_SHORT).show()
+    }
+}
+
+// Function to read feedback from internal storage
+fun readFeedback(context: Context): String {
+    return try {
+        context.openFileInput("feedback.txt").bufferedReader().useLines { lines ->
+            lines.joinToString("\n")
+        }
+    } catch (e: Exception) {
+        "No feedback available."
     }
 }
 

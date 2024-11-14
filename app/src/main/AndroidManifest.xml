@@ -24,6 +24,7 @@
         </activity>
 
         <activity android:name=".HelpLineActivity" android:exported="true"/>
+        <activity android:name=".overviewActivity" android:exported="true"/>
 
 
         <receiver android:name=".ReminderReceiver" android:exported="false" />
